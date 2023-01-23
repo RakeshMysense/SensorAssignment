@@ -1,0 +1,130 @@
+service: SensorDataTable
+
+frameworkVersion: '>=2.25.2 <3.0.0'
+
+custom:
+  serverless-iam-roles-per-function:
+    defaultInherit: true
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: eu-west-2
+
+plugins:
+  - serverless-iam-roles-per-function
+
+functions:
+  # create:
+  #   handler: create.create
+  #   name: createSensor
+  #   description: Store the sensor readings
+  #   environment:
+  #     SENSORS_TABLE_NAME:
+  #       Ref: SensorDataTable
+  #   # iamRoleStatements:
+  #   #   - Effect: Allow
+  #   #     Action:
+  #   #       - dynamodb:GetItem
+  #         # - dynamodb:PutItem
+  #       # Resource: '#{MisplacedSensors.Arn}'
+  #   events:
+  #     - http:
+  #         path: /user/sensor/{id}
+  #         method: POST
+    
+  # get:
+  #   handler: get.get
+  #   name: getSensor
+  #   description: get the sensor readings
+  #   environment:
+  #     SENSORS_TABLE_NAME:
+  #       Ref: SensorDataTable
+  #   # iamRoleStatements:
+  #   #   - Effect: Allow
+  #   #     Action:
+  #   #       - dynamodb:GetItem
+  #         # - dynamodb:PutItem
+  #       # Resource: '#{MisplacedSensors.Arn}'
+  #   events:
+  #     - http:
+  #         path: /user/sensor/{id}
+  #         method: GET
+
+  # update:
+  #   handler: update.update
+  #   name: updateSensor
+  #   description: update the sensor readings
+  #   environment:
+  #     SENSORS_TABLE_NAME:
+  #       Ref: SensorDataTable
+  #   # iamRoleStatements:
+  #   #   - Effect: Allow
+  #   #     Action:
+  #   #       - dynamodb:GetItem
+  #         # - dynamodb:PutItem
+  #       # Resource: '#{MisplacedSensors.Arn}'
+  #   events:
+  #     - http:
+  #         path: /user/sensor/{id}
+  #         method: PUT
+
+  # delete:
+  #   handler: delete.remove
+  #   name: deleteSensor
+  #   description: delete the sensor readings
+  #   environment:
+  #     SENSORS_TABLE_NAME:
+  #       Ref: SensorDataTable
+  #   # iamRoleStatements:
+  #   #   - Effect: Allow
+  #   #     Action:
+  #   #       - dynamodb:GetItem
+  #         # - dynamodb:PutItem
+  #       # Resource: '#{MisplacedSensors.Arn}'
+  #   events:
+  #     - http:
+  #         path: /user/sensor/{id}
+  #         method: DELETE
+
+  test:
+    handler: test.testCreate
+    name: testSensor
+    description: Store the sensor readings
+    environment:
+      SENSORS_TABLE_NAME:
+        Ref: SensorDataTable
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: 'arn:aws:dynamodb:eu-west-2:697892281854:table/SensorDataTable'
+    events:
+      - http:
+          path: /sensor
+          method: POST
+
+  testGet:
+    handler: test.get
+    name: testGetSensor
+    description: get the sensor readings
+    environment:
+      SENSORS_TABLE_NAME:
+        Ref: SensorDataTable
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:GetItem
+        Resource: 'arn:aws:dynamodb:eu-west-2:697892281854:table/SensorDataTable'
+    events:
+      - http:
+          path: /user/sensor/{sensorid}
+          method: GET
+resources:
+  - ${file(Dynamo.yml)}
+
+
+
+
+
